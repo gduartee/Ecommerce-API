@@ -104,6 +104,21 @@ public class ProductService {
         );
     }
 
+    public void updateProductById(Integer productId, UpdateProductDto updateProductDto) {
+        var productEntity = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+
+        if(updateProductDto.name() != null)
+            productEntity.setName(updateProductDto.name());
+
+        if(updateProductDto.description() != null)
+            productEntity.setDescription(updateProductDto.description());
+
+        if(updateProductDto.material() != null)
+            productEntity.setMaterial(updateProductDto.material());
+
+        productRepository.save(productEntity);
+    }
+
     public void deleteProductById(Integer productId) {
         productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto com esse id não encontrado"));
 

@@ -3,6 +3,7 @@ package com.ecommerce.joias.controller;
 import com.ecommerce.joias.dto.ApiResponse;
 import com.ecommerce.joias.dto.CreateProductDto;
 import com.ecommerce.joias.dto.ProductResponseDto;
+import com.ecommerce.joias.dto.UpdateProductDto;
 import com.ecommerce.joias.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,13 @@ public class ProductController {
         var products = productService.listProducts();
 
         return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponseDto> updateProductById(@PathVariable("productId") Integer productId, @RequestBody UpdateProductDto updateProductDto){
+        productService.updateProductById(productId, updateProductDto);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{productId}")
