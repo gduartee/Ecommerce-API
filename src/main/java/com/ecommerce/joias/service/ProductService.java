@@ -1,8 +1,6 @@
 package com.ecommerce.joias.service;
 
-import com.ecommerce.joias.dto.CreateProductDto;
-import com.ecommerce.joias.dto.ProductResponseDto;
-import com.ecommerce.joias.dto.ProductVariantResponseDto;
+import com.ecommerce.joias.dto.*;
 import com.ecommerce.joias.entity.Product;
 import com.ecommerce.joias.repository.CategoryRepository;
 import com.ecommerce.joias.repository.ProductRepository;
@@ -15,12 +13,12 @@ public class ProductService {
 
     private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository){
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
 
-    public ProductResponseDto createProduct(CreateProductDto createProductDto){
+    public ProductResponseDto createProduct(CreateProductDto createProductDto) {
         var category = categoryRepository.findById(createProductDto.categoryId()).orElseThrow(() -> new RuntimeException("Categoria correspondente ao id fornecido não encontrada."));
 
         // DTO -> ENTITY
@@ -47,7 +45,7 @@ public class ProductService {
         );
     }
 
-    public ProductResponseDto getProductById(Integer productId){
+    public ProductResponseDto getProductById(Integer productId) {
         var product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         var productVariantsDto = product.getVariants().stream()
@@ -75,7 +73,38 @@ public class ProductService {
         );
     }
 
-    public void deleteProductById(Integer productId){
+    public ApiResponse<ProductResponseDto> listProducts() {
+        var products = productRepository.findAll();
+
+        var productsDto = products.stream().map(product -> new ProductResponseDto(
+                product.getProductId(),
+                product.getName(),
+                product.getDescription(),
+                product.getMaterial(),
+                new ProductResponseDto.CategoryInfo(
+                        product.getCategory().getCategoryId(),
+                        product.getCategory().getName()
+                ),
+
+                product.getVariants().stream().map(productVariant -> new ProductVariantResponseDto(
+                        product.getVariants().getFirst().getProductVariantId(),
+                        product.getVariants().getFirst().getSize(),
+                        product.getVariants().getFirst().getSku(),
+                        product.getVariants().getFirst().getPrice(),
+                        product.getVariants().getFirst().getStockQuantity(),
+                        product.getVariants().getFirst().getWeightGrams()
+                )).toList()
+
+
+        )).toList();
+
+        return new ApiResponse<>(
+                productsDto,
+                productsDto.size()
+        );
+    }
+
+    public void deleteProductById(Integer productId) {
         productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto com esse id não encontrado"));
 
         productRepository.deleteById(productId);
