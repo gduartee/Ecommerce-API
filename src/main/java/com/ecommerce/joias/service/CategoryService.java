@@ -74,9 +74,12 @@ public class CategoryService {
     public void updateCategoryById(Integer categoryId, CategoryDto updateCategoryDto){
         var categoryEntity = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
 
-        if(!categoryEntity.getName().equals(updateCategoryDto.name()))
-            if(categoryRepository.existsByName(updateCategoryDto.name()))
-                throw new RuntimeException("Já existe uma categoria com esse nome");
+        if(!categoryEntity.getName().equals(updateCategoryDto.name())){
+            boolean nameAlreadyTaken = categoryRepository.existsByNameAndCategoryIdNot(updateCategoryDto.name(), categoryEntity.getCategoryId());
+
+            if(nameAlreadyTaken)
+                throw new RuntimeException("Já existe uma categoria com este nome.");
+        }
 
         categoryEntity.setName(updateCategoryDto.name());
 
