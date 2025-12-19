@@ -1,7 +1,7 @@
 package com.ecommerce.joias.service;
 
-import com.ecommerce.joias.dto.CreateUserDto;
-import com.ecommerce.joias.dto.UpdateUserDto;
+import com.ecommerce.joias.dto.create.CreateUserDto;
+import com.ecommerce.joias.dto.update.UpdateUserDto;
 import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

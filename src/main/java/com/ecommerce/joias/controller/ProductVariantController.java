@@ -1,8 +1,9 @@
 package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.ApiResponse;
-import com.ecommerce.joias.dto.CreateProductVariantDto;
+import com.ecommerce.joias.dto.create.CreateProductVariantDto;
 import com.ecommerce.joias.dto.ProductVariantResponseDto;
+import com.ecommerce.joias.dto.update.UpdateProductVariantDto;
 import com.ecommerce.joias.service.ProductVariantService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -41,5 +42,19 @@ public class ProductVariantController {
         var productVariants = productVariantService.listProductVariants();
 
         return ResponseEntity.ok(productVariants);
+    }
+
+    @PutMapping("/{productVariantId}")
+    public ResponseEntity<Void> updateProductVariantById(@PathVariable("productVariantId") Integer productVariantId, @RequestBody UpdateProductVariantDto updateProductVariantDto){
+        productVariantService.updateProductVariantById(productVariantId, updateProductVariantDto);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{productVariantId}")
+    public ResponseEntity<Void> deleteProductVariantById(@PathVariable("productVariantId") Integer productVariantId){
+        productVariantService.deleteProductVariantById(productVariantId);
+
+        return ResponseEntity.noContent().build();
     }
 }

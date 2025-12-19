@@ -1,4 +1,4 @@
-package com.ecommerce.joias.dto;
+package com.ecommerce.joias.dto.update;
 
 public record UpdateProductDto(
         String name,

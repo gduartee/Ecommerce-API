@@ -1,11 +1,10 @@
 package com.ecommerce.joias.controller;
 
-import com.ecommerce.joias.dto.CreateUserDto;
-import com.ecommerce.joias.dto.UpdateUserDto;
+import com.ecommerce.joias.dto.create.CreateUserDto;
+import com.ecommerce.joias.dto.update.UpdateUserDto;
 import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.service.UserService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

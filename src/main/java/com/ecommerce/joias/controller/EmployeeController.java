@@ -1,7 +1,7 @@
 package com.ecommerce.joias.controller;
 
-import com.ecommerce.joias.dto.CreateEmployeeDto;
-import com.ecommerce.joias.dto.UpdateEmployeeDto;
+import com.ecommerce.joias.dto.create.CreateEmployeeDto;
+import com.ecommerce.joias.dto.update.UpdateEmployeeDto;
 import com.ecommerce.joias.entity.Employee;
 import com.ecommerce.joias.service.EmployeeService;
 import jakarta.validation.Valid;

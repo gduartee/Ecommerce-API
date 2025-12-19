@@ -1,4 +1,4 @@
-package com.ecommerce.joias.dto;
+package com.ecommerce.joias.dto.update;
 
 import jakarta.validation.constraints.Pattern;
 
