@@ -1,14 +1,12 @@
 package com.ecommerce.joias.service;
 
-import com.ecommerce.joias.dto.ApiResponse;
+import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.CategoryDto;
-import com.ecommerce.joias.dto.CategoryResponseDto;
+import com.ecommerce.joias.dto.response.CategoryResponseDto;
 import com.ecommerce.joias.dto.ProductShortDto;
 import com.ecommerce.joias.entity.Category;
 import com.ecommerce.joias.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CategoryService {

@@ -1,7 +1,9 @@
 package com.ecommerce.joias.service;
 
-import com.ecommerce.joias.dto.*;
 import com.ecommerce.joias.dto.create.CreateProductDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.ProductResponseDto;
+import com.ecommerce.joias.dto.response.ProductVariantResponseDto;
 import com.ecommerce.joias.dto.update.UpdateProductDto;
 import com.ecommerce.joias.entity.Product;
 import com.ecommerce.joias.repository.CategoryRepository;

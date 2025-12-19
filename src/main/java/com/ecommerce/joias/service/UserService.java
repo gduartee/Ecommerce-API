@@ -1,6 +1,9 @@
 package com.ecommerce.joias.service;
 
 import com.ecommerce.joias.dto.create.CreateUserDto;
+import com.ecommerce.joias.dto.response.AddressResponseDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.UserResponseDto;
 import com.ecommerce.joias.dto.update.UpdateUserDto;
 import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.repository.UserRepository;
@@ -44,12 +47,46 @@ public class UserService {
         return userSaved.getUserId();
     }
 
-    public User getUserById(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException(("Usuário não encontrado")));
+    public UserResponseDto getUserById(UUID userId) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(("Usuário não encontrado")));
+
+        return new UserResponseDto(
+                user.getUserId(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getCpf(),
+                user.getPassword(),
+                user.getAddresses().stream().map(
+                        address -> new AddressResponseDto(
+                                address.getAddressId(),
+                                address.getCep(),
+                                address.getStreet(),
+                                address.getNum())
+                ).toList()
+        );
     }
 
-    public List<User> listUsers() {
-        return userRepository.findAll();
+    public ApiResponse<UserResponseDto> listUsers() {
+        var users = userRepository.findAll();
+
+        var usersDto = users.stream().map(user -> new UserResponseDto(
+                user.getUserId(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getCpf(),
+                user.getPassword(),
+                user.getAddresses().stream().map(address -> new AddressResponseDto(
+                        address.getAddressId(),
+                        address.getCep(),
+                        address.getStreet(),
+                        address.getNum()
+                )).toList()
+        )).toList();
+
+        return new ApiResponse<>(
+                usersDto,
+                usersDto.size()
+        );
     }
 
     public void deleteUserById(UUID userId) {

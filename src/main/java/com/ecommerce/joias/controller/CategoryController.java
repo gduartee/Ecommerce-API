@@ -1,8 +1,8 @@
 package com.ecommerce.joias.controller;
 
-import com.ecommerce.joias.dto.ApiResponse;
+import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.CategoryDto;
-import com.ecommerce.joias.dto.CategoryResponseDto;
+import com.ecommerce.joias.dto.response.CategoryResponseDto;
 import com.ecommerce.joias.entity.Category;
 import com.ecommerce.joias.service.CategoryService;
 import jakarta.validation.Valid;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/categories")

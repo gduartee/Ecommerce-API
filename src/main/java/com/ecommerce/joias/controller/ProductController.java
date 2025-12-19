@@ -1,8 +1,8 @@
 package com.ecommerce.joias.controller;
 
-import com.ecommerce.joias.dto.ApiResponse;
+import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.create.CreateProductDto;
-import com.ecommerce.joias.dto.ProductResponseDto;
+import com.ecommerce.joias.dto.response.ProductResponseDto;
 import com.ecommerce.joias.dto.update.UpdateProductDto;
 import com.ecommerce.joias.service.ProductService;
 import jakarta.validation.Valid;

@@ -1,4 +1,6 @@
-package com.ecommerce.joias.dto;
+package com.ecommerce.joias.dto.response;
+
+import com.ecommerce.joias.dto.ProductShortDto;
 
 import java.util.List;
 

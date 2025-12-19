@@ -1,6 +1,8 @@
 package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.create.CreateUserDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.UserResponseDto;
 import com.ecommerce.joias.dto.update.UpdateUserDto;
 import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.service.UserService;
@@ -29,14 +31,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable("userId") String userId){
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("userId") String userId){
         var user = userService.getUserById(UUID.fromString(userId));
 
         return ResponseEntity.ok(user);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> listUsers(){
+    public ResponseEntity<ApiResponse<UserResponseDto>> listUsers(){
         var users = userService.listUsers();
 
         return ResponseEntity.ok(users);
