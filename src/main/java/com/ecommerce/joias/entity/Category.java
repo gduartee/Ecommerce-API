@@ -14,8 +14,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    @JsonIgnore
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Category> subCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
@@ -50,5 +58,26 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public Category getParent() {
+        return parent;
+    }
+
+    public void setParent(Category parent) {
+        this.parent = parent;
+    }
+
+    public List<Category> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(List<Category> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public void addSubCategory(Category subCategory){
+        subCategories.add(subCategory);
+        subCategory.setParent(this);
     }
 }

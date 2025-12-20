@@ -1,8 +1,9 @@
 package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.response.ApiResponse;
-import com.ecommerce.joias.dto.CategoryDto;
+import com.ecommerce.joias.dto.create.CreateCategoryDto;
 import com.ecommerce.joias.dto.response.CategoryResponseDto;
+import com.ecommerce.joias.dto.update.UpdateCategoryDto;
 import com.ecommerce.joias.entity.Category;
 import com.ecommerce.joias.service.CategoryService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@RequestBody @Valid CategoryDto createCategoryDto){
+    public ResponseEntity<Category> createCategory(@RequestBody @Valid CreateCategoryDto createCategoryDto){
         var createdCategory = categoryService.createCategory(createCategoryDto);
 
         URI location = URI.create("/categories/" + createdCategory.getCategoryId());
@@ -44,7 +45,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<Void> updateCategoryById(@PathVariable("categoryId") Integer categoryId, @RequestBody @Valid CategoryDto updateCategoryDto){
+    public ResponseEntity<Void> updateCategoryById(@PathVariable("categoryId") Integer categoryId, @RequestBody @Valid UpdateCategoryDto updateCategoryDto){
 
         categoryService.updateCategoryById(categoryId, updateCategoryDto);
 
