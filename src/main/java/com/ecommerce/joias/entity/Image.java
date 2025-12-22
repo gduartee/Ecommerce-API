@@ -12,6 +12,9 @@ public class Image {
     @Column(name = "url", nullable = false)
     private String url;
 
+    @Column(name = "public_id", nullable = false)
+    private String publicId;
+
     @Column(name = "parent_id", nullable = false)
     private Integer parentId;
 
@@ -19,15 +22,15 @@ public class Image {
     private String parentType;
 
     @Column(name = "is_main")
-    private boolean isMain = false;
-
+    private Boolean isMain = false;
 
     public Image(){
 
     }
 
-    public Image(String url, Integer parentId, String parentType, boolean isMain) {
+    public Image(String url, String publicId, Integer parentId, String parentType, boolean isMain) {
         this.url = url;
+        this.publicId = publicId;
         this.parentId = parentId;
         this.parentType = parentType;
         this.isMain = isMain;
@@ -47,6 +50,22 @@ public class Image {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
+
+    public Boolean getMain() {
+        return isMain;
+    }
+
+    public void setMain(Boolean main) {
+        isMain = main;
     }
 
     public Integer getParentId() {
