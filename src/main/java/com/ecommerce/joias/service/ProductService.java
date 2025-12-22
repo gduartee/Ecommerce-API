@@ -111,6 +111,12 @@ public class ProductService {
     public void updateProductById(Integer productId, UpdateProductDto updateProductDto) {
         var productEntity = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
+        if(updateProductDto.categoryId() != null && updateProductDto.categoryId() != productEntity.getCategory().getCategoryId()){
+            var category = categoryRepository.findById(updateProductDto.categoryId()).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+            productEntity.setCategory(category);
+        }
+
         if(updateProductDto.name() != null)
             productEntity.setName(updateProductDto.name());
 
