@@ -8,6 +8,7 @@ import com.ecommerce.joias.dto.update.UpdateProductDto;
 import com.ecommerce.joias.entity.Product;
 import com.ecommerce.joias.repository.CategoryRepository;
 import com.ecommerce.joias.repository.ProductRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -80,10 +81,14 @@ public class ProductService {
         );
     }
 
-    public ApiResponse<ProductResponseDto> listProducts(int page, int limit) {
+    public ApiResponse<ProductResponseDto> listProducts(Integer page, Integer limit, String name) {
         Pageable pageable = PageRequest.of(page, limit);
+        Page<Product> pageData;
 
-        var pageData = productRepository.findAll(pageable);
+        if(name != null && !name.isBlank())
+            pageData = productRepository.findByNameContainingIgnoreCase(name, pageable);
+        else
+            pageData = productRepository.findAll(pageable);
 
         var productsDto = pageData.getContent().stream().map(product -> new ProductResponseDto(
                 product.getProductId(),

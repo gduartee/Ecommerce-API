@@ -1,9 +1,14 @@
 package com.ecommerce.joias.service;
 
 import com.ecommerce.joias.dto.create.CreateEmployeeDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.EmployeeResponseDto;
 import com.ecommerce.joias.dto.update.UpdateEmployeeDto;
 import com.ecommerce.joias.entity.Employee;
 import com.ecommerce.joias.repository.EmployeeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +46,30 @@ public class EmployeeService {
         return employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
     }
 
-    public List<Employee> listEmployees(){
-        return employeeRepository.findAll();
+    public ApiResponse<EmployeeResponseDto> listEmployees(Integer page, Integer limit, String name){
+        Pageable pageable = PageRequest.of(page, limit);
+
+        Page<Employee> pageData;
+
+        if(name != null && !name.isBlank())
+            pageData = employeeRepository.findByNameContainingIgnoreCase(name, pageable);
+        else pageData = employeeRepository.findAll(pageable);
+
+        var employeesDto = pageData.stream().map(employee -> new EmployeeResponseDto(
+                employee.getEmployeeId(),
+                employee.getName(),
+                employee.getEmail(),
+                employee.getPassword(),
+                employee.getRole()
+        )).toList();
+
+        return new ApiResponse<>(
+                employeesDto,
+                pageData.getTotalElements(),
+                pageData.getTotalPages(),
+                pageData.getNumber(),
+                pageData.getSize()
+        );
     }
 
     public void updateEmployeeById(Integer employeeId, UpdateEmployeeDto updateEmployeeDto){

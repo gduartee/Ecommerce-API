@@ -7,6 +7,7 @@ import com.ecommerce.joias.dto.response.UserResponseDto;
 import com.ecommerce.joias.dto.update.UpdateUserDto;
 import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.repository.UserRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,10 +69,14 @@ public class UserService {
         );
     }
 
-    public ApiResponse<UserResponseDto> listUsers(int page, int limit) {
+    public ApiResponse<UserResponseDto> listUsers(Integer page, Integer limit, String name) {
         Pageable pageable = PageRequest.of(page, limit);
+        Page<User> pageData;
 
-        var pageData = userRepository.findAll(pageable);
+        if(name != null && !name.isBlank())
+            pageData = userRepository.findByNameContainingIgnoreCase(name, pageable);
+        else
+            pageData = userRepository.findAll(pageable);
 
         var usersDto = pageData.getContent().stream().map(user -> new UserResponseDto(
                 user.getUserId(),

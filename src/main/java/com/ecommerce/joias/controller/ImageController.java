@@ -41,8 +41,8 @@ public class ImageController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<ImageResponseDto>> listImages(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "limit", defaultValue = "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ) {
         var listImagesDto = imageService.listImages(page, limit);
 

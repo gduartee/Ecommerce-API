@@ -1,6 +1,8 @@
 package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.create.CreateEmployeeDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.EmployeeResponseDto;
 import com.ecommerce.joias.dto.update.UpdateEmployeeDto;
 import com.ecommerce.joias.entity.Employee;
 import com.ecommerce.joias.service.EmployeeService;
@@ -12,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -35,8 +37,12 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> listEmployees(){
-        var employees = employeeService.listEmployees();
+    public ResponseEntity<ApiResponse<EmployeeResponseDto>> listEmployees(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(name = "name", required = false) String name
+    ){
+        var employees = employeeService.listEmployees(page, limit, name);
 
         return ResponseEntity.ok(employees);
     }

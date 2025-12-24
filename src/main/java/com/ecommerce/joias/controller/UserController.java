@@ -39,10 +39,11 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<UserResponseDto>> listUsers(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "limit", defaultValue = "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(name = "name", required = false) String name
     ) {
-        var users = userService.listUsers(page, limit);
+        var users = userService.listUsers(page, limit, name);
 
         return ResponseEntity.ok(users);
     }

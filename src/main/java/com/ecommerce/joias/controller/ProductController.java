@@ -38,10 +38,11 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<ProductResponseDto>> listProducts(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "limit", defaultValue = "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(name = "name", required = false) String name
     ){
-        var products = productService.listProducts(page, limit);
+        var products = productService.listProducts(page, limit, name);
 
         return ResponseEntity.ok(products);
     }

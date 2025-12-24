@@ -65,7 +65,7 @@ public class ProductVariantService {
         );
     }
 
-    public ApiResponse<ProductVariantResponseDto> listProductVariants(int page, int limit) {
+    public ApiResponse<ProductVariantResponseDto> listProductVariants(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
         var pageData = productVariantRepository.findAll(pageable);

@@ -38,7 +38,7 @@ public class ProductVariantController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<ProductVariantResponseDto>> listProductVariants(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "limit", defaultValue = "10") int limit) {
+    public ResponseEntity<ApiResponse<ProductVariantResponseDto>> listProductVariants(@RequestParam(name = "page", defaultValue = "0") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit) {
         var productVariants = productVariantService.listProductVariants(page, limit);
 
         return ResponseEntity.ok(productVariants);

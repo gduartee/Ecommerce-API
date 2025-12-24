@@ -39,10 +39,11 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<CategoryResponseDto>> listCategories(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "limit", defaultValue = "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(name = "name", required = false) String name
     ){
-        var categories = categoryService.listCategories(page, limit);
+        var categories = categoryService.listCategories(page, limit, name);
 
         return ResponseEntity.ok(categories);
     }

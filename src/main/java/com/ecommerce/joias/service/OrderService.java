@@ -118,7 +118,7 @@ public class OrderService {
         );
     }
 
-    public ApiResponse<OrderResponseDto> listOrders(int page, int limit) {
+    public ApiResponse<OrderResponseDto> listOrders(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
         var pageData = orderRepository.findAll(pageable);

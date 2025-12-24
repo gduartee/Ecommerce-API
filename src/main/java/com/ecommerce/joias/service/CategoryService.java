@@ -8,6 +8,7 @@ import com.ecommerce.joias.dto.response.SubCategoriesResponseDto;
 import com.ecommerce.joias.dto.update.UpdateCategoryDto;
 import com.ecommerce.joias.entity.Category;
 import com.ecommerce.joias.repository.CategoryRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -54,10 +55,14 @@ public class CategoryService {
         );
     }
 
-    public ApiResponse<CategoryResponseDto> listCategories(int page, int limit) {
+    public ApiResponse<CategoryResponseDto> listCategories(Integer page, Integer limit, String name) {
         Pageable pageable = PageRequest.of(page, limit);
+        Page<Category> pageData;
 
-        var pageData = categoryRepository.findAll(pageable);
+        if(name != null && !name.isBlank())
+            pageData = categoryRepository.findByNameContainingIgnoreCase(name, pageable);
+        else
+            pageData = categoryRepository.findAll(pageable);
 
         var categoriesDto = pageData.getContent().stream().map(
                 category -> new CategoryResponseDto(

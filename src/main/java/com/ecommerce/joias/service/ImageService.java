@@ -82,7 +82,7 @@ public class ImageService {
         );
     }
 
-    public ApiResponse<ImageResponseDto> listImages(int page, int limit) {
+    public ApiResponse<ImageResponseDto> listImages(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
         var pageData = imageRepository.findAll(pageable);

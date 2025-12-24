@@ -54,7 +54,7 @@ public class AddressService {
         );
     }
 
-    public ApiResponse<AddressResponseDto> listAddresses(int page, int limit) {
+    public ApiResponse<AddressResponseDto> listAddresses(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
         var pageData = addressRepository.findAll(pageable);

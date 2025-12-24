@@ -39,8 +39,8 @@ public class AddressController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<AddressResponseDto>> listAddresses(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "limit", defaultValue = "10") int limit
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
     ){
         var addressesDto = addressService.listAddresses(page, limit);
 

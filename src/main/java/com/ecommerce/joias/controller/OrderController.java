@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<OrderResponseDto>> listOrders(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "limit", defaultValue = "10") int limit) {
+    public ResponseEntity<ApiResponse<OrderResponseDto>> listOrders(@RequestParam(name = "page", defaultValue = "0") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit) {
         var ordersDto = orderService.listOrders(page, limit);
 
         return ResponseEntity.ok(ordersDto);
