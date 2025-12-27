@@ -1,12 +1,16 @@
 package com.ecommerce.joias.service;
 
 import com.ecommerce.joias.dto.create.CreateSubcategoryDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.response.SubcategoryResponseDto;
 import com.ecommerce.joias.dto.update.UpdateSubcategoryDto;
 import com.ecommerce.joias.entity.Subcategory;
 import com.ecommerce.joias.repository.CategoryRepository;
 import com.ecommerce.joias.repository.SubcategoryRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 
 @Service
 public class SubcategoryService {
@@ -41,6 +45,22 @@ public class SubcategoryService {
                 subcategoryEntity.getSubcategoryId(),
                 subcategoryEntity.getName()
         );
+    }
+
+    public ApiResponse<SubcategoryResponseDto> getSubcategoriesByCategoryId(Integer categoryId, Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        var subcategoriesEntity = subcategoryRepository.findAllByCategoryId(categoryId, pageable);
+
+        var subcategoriesDto = subcategoriesEntity.stream().map(subcategory -> new SubcategoryResponseDto(
+                subcategory.getSubcategoryId(),
+                subcategory.getName()
+        )).toList();
+
+        return new ApiResponse<>(
+                subcategoriesDto,
+
+                )
+
     }
 
     public void updateSubcategoryById(Integer subcategoryId, UpdateSubcategoryDto updateSubcategoryDto) {
