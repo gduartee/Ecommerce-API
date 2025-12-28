@@ -1,6 +1,7 @@
 package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.create.CreateSubcategoryDto;
+import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.response.SubcategoryResponseDto;
 import com.ecommerce.joias.dto.update.UpdateSubcategoryDto;
 import com.ecommerce.joias.service.SubcategoryService;
@@ -33,6 +34,17 @@ public class SubcategoryController {
         var subCategoryDto = subcategoryService.getSubcategoryById(subcategoryId);
 
         return ResponseEntity.ok(subCategoryDto);
+    }
+
+    @GetMapping("/categoryId/{categoryId}")
+    public ResponseEntity<ApiResponse<SubcategoryResponseDto>> getSubcategoriesByCategoryId(
+            @PathVariable("categoryId") Integer categoryId,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
+    ) {
+        var subCategories = subcategoryService.getSubcategoriesByCategoryId(categoryId, page, limit);
+
+        return ResponseEntity.ok(subCategories);
     }
 
     @PutMapping("/{subcategoryId}")

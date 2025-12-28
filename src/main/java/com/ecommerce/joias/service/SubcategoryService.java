@@ -50,7 +50,7 @@ public class SubcategoryService {
     public ApiResponse<SubcategoryResponseDto> getSubcategoriesByCategoryId(Integer categoryId, Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Subcategory> pageData;
-        pageData = subcategoryRepository.findAllByCategoryId(categoryId, pageable);
+        pageData = subcategoryRepository.findAllByCategory_CategoryId(categoryId, pageable);
 
         var subcategoriesDto = pageData.stream().map(subcategory -> new SubcategoryResponseDto(
                 subcategory.getSubcategoryId(),
