@@ -2,6 +2,7 @@ package com.ecommerce.joias.service;
 
 import com.ecommerce.joias.dto.create.CreateSubcategoryDto;
 import com.ecommerce.joias.dto.response.ApiResponse;
+import com.ecommerce.joias.dto.response.ProductShortResponseDto;
 import com.ecommerce.joias.dto.response.SubcategoryResponseDto;
 import com.ecommerce.joias.dto.update.UpdateSubcategoryDto;
 import com.ecommerce.joias.entity.Subcategory;
@@ -34,7 +35,12 @@ public class SubcategoryService {
 
         return new SubcategoryResponseDto(
                 subcategorySaved.getSubcategoryId(),
-                subcategorySaved.getName()
+                subcategorySaved.getName(),
+                subcategorySaved.getProducts().stream().map(product -> new ProductShortResponseDto(
+                        product.getProductId(),
+                        product.getName(),
+                        product.getDescription()
+                )).toList()
         );
     }
 
@@ -43,7 +49,12 @@ public class SubcategoryService {
 
         return new SubcategoryResponseDto(
                 subcategoryEntity.getSubcategoryId(),
-                subcategoryEntity.getName()
+                subcategoryEntity.getName(),
+                subcategoryEntity.getProducts().stream().map(product -> new ProductShortResponseDto(
+                        product.getProductId(),
+                        product.getName(),
+                        product.getDescription()
+                )).toList()
         );
     }
 
@@ -54,7 +65,12 @@ public class SubcategoryService {
 
         var subcategoriesDto = pageData.stream().map(subcategory -> new SubcategoryResponseDto(
                 subcategory.getSubcategoryId(),
-                subcategory.getName()
+                subcategory.getName(),
+                subcategory.getProducts().stream().map(product -> new ProductShortResponseDto(
+                        product.getProductId(),
+                        product.getName(),
+                        product.getDescription()
+                )).toList()
         )).toList();
 
         return new ApiResponse<>(

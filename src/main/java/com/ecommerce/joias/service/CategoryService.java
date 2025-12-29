@@ -38,14 +38,14 @@ public class CategoryService {
         return new CategoryResponseDto(
                 category.getCategoryId(),
                 category.getName(),
-                category.getProducts().stream().map(product -> new ProductShortResponseDto(
-                        product.getProductId(),
-                        product.getName(),
-                        product.getDescription()
-                )).toList(),
-                category.getSubcategories().stream().map(subCategory -> new SubcategoryResponseDto(
-                        subCategory.getSubcategoryId(),
-                        subCategory.getName()
+                category.getSubcategories().stream().map(subcategory -> new SubcategoryResponseDto(
+                        subcategory.getSubcategoryId(),
+                        subcategory.getName(),
+                        subcategory.getProducts().stream().map(product -> new ProductShortResponseDto(
+                                product.getProductId(),
+                                product.getName(),
+                                product.getDescription()
+                        )).toList()
                 )).toList()
         );
     }
@@ -54,7 +54,7 @@ public class CategoryService {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Category> pageData;
 
-        if(name != null && !name.isBlank())
+        if (name != null && !name.isBlank())
             pageData = categoryRepository.findByNameContainingIgnoreCase(name, pageable);
         else
             pageData = categoryRepository.findAll(pageable);
@@ -63,16 +63,14 @@ public class CategoryService {
                 category -> new CategoryResponseDto(
                         category.getCategoryId(),
                         category.getName(),
-                        category.getProducts().stream().map(
-                                product -> new ProductShortResponseDto(
+                        category.getSubcategories().stream().map(subCategory -> new SubcategoryResponseDto(
+                                subCategory.getSubcategoryId(),
+                                subCategory.getName(),
+                                subCategory.getProducts().stream().map(product -> new ProductShortResponseDto(
                                         product.getProductId(),
                                         product.getName(),
                                         product.getDescription()
-                                )
-                        ).toList(),
-                        category.getSubcategories().stream().map(subCategory -> new SubcategoryResponseDto(
-                                subCategory.getSubcategoryId(),
-                                subCategory.getName()
+                                )).toList()
                         )).toList()
                 )
         ).toList();
@@ -98,9 +96,9 @@ public class CategoryService {
     public void deleteCategoryById(Integer categoryId) {
         var categoryEntity = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Não existe nenhuma categoria com esse id."));
 
-        // Se a lista de produtos não estiver vazia, proíbe a deleção
-        if (!categoryEntity.getProducts().isEmpty())
-            throw new RuntimeException("Não é possível deletar esta categoria pois existem produtos vinculados a ela.");
+        // Se a lista de subcategorias não estiver vazia, proíbe a deleção
+        if (!categoryEntity.getSubcategories().isEmpty())
+            throw new RuntimeException("Não é possível deletar esta categoria pois existem subcategorias vinculadas à ela.");
 
         categoryRepository.deleteById(categoryId);
     }

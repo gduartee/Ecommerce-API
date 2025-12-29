@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateProductDto(
-        @NotNull(message = "Id da categoria obrigatório")
-        Integer categoryId,
+        @NotNull(message = "Id da subcategoria obrigatório")
+        Integer subcategoryId,
 
         @NotBlank(message = "Nome é obrigatório")
         String name,

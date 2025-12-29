@@ -7,11 +7,11 @@ public record ProductResponseDto(
         String name,
         String description,
         String material,
-        CategoryInfo category,
+        SubcategoryInfo subcategory,
         List<ProductVariantResponseDto> productVariants
 ) {
-    public record CategoryInfo(
-            Integer categoryId,
+    public record SubcategoryInfo(
+            Integer subcategoryId,
             String name
     ) {}
 }

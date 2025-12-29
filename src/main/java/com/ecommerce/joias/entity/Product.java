@@ -1,6 +1,5 @@
 package com.ecommerce.joias.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,8 +14,8 @@ public class Product {
     private Integer productId;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "subcategory_id", nullable = false)
+    private Subcategory subcategory;
 
     @Column(name = "name")
     private String name;
@@ -33,8 +32,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(Category category, String name, String description, String material) {
-        this.category = category;
+    public Product(Subcategory subcategory, String name, String description, String material) {
+        this.subcategory = subcategory;
         this.name = name;
         this.description = description;
         this.material = material;
@@ -48,12 +47,12 @@ public class Product {
         this.productId = productId;
     }
 
-    public Category getCategory() {
-        return category;
+    public Subcategory getSubcategory() {
+        return subcategory;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setSubcategory(Subcategory subcategory) {
+        this.subcategory = subcategory;
     }
 
     public String getName() {

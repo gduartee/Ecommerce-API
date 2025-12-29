@@ -8,6 +8,7 @@ import com.ecommerce.joias.dto.update.UpdateProductDto;
 import com.ecommerce.joias.entity.Product;
 import com.ecommerce.joias.repository.CategoryRepository;
 import com.ecommerce.joias.repository.ProductRepository;
+import com.ecommerce.joias.repository.SubcategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,28 +20,28 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    private final CategoryRepository categoryRepository;
+    private final SubcategoryRepository subcategoryRepository;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, SubcategoryRepository subcategoryRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
+        this.subcategoryRepository = subcategoryRepository;
     }
 
     public ProductResponseDto createProduct(CreateProductDto createProductDto) {
-        var category = categoryRepository.findById(createProductDto.categoryId()).orElseThrow(() -> new RuntimeException("Categoria correspondente ao id fornecido não encontrada."));
+        var subcategory = subcategoryRepository.findById(createProductDto.subcategoryId()).orElseThrow(() -> new RuntimeException("Subcategoria correspondente ao id fornecido não encontrada."));
 
         // DTO -> ENTITY
         var productEntity = new Product();
         productEntity.setName(createProductDto.name());
-        productEntity.setCategory(category);
+        productEntity.setSubcategory(subcategory);
         productEntity.setDescription(createProductDto.description());
         productEntity.setMaterial(createProductDto.material());
 
         var productSaved = productRepository.save(productEntity);
 
-        var categoryInfo = new ProductResponseDto.CategoryInfo(
-                category.getCategoryId(),
-                category.getName()
+        var subcategoryInfo = new ProductResponseDto.SubcategoryInfo(
+                subcategory.getSubcategoryId(),
+                subcategory.getName()
         );
 
         return new ProductResponseDto(
@@ -48,7 +49,7 @@ public class ProductService {
                 productSaved.getName(),
                 productSaved.getDescription(),
                 productSaved.getMaterial(),
-                categoryInfo,
+                subcategoryInfo,
                 java.util.List.of()
         );
     }
@@ -66,9 +67,9 @@ public class ProductService {
                         variant.getWeightGrams()
                 )).toList();
 
-        var categoryInfo = new ProductResponseDto.CategoryInfo(
-                product.getCategory().getCategoryId(),
-                product.getCategory().getName()
+        var categoryInfo = new ProductResponseDto.SubcategoryInfo(
+                product.getSubcategory().getSubcategoryId(),
+                product.getSubcategory().getName()
         );
 
         return new ProductResponseDto(
@@ -95,9 +96,9 @@ public class ProductService {
                 product.getName(),
                 product.getDescription(),
                 product.getMaterial(),
-                new ProductResponseDto.CategoryInfo(
-                        product.getCategory().getCategoryId(),
-                        product.getCategory().getName()
+                new ProductResponseDto.SubcategoryInfo(
+                        product.getSubcategory().getSubcategoryId(),
+                        product.getSubcategory().getName()
                 ),
 
                 product.getVariants().stream().map(productVariant -> new ProductVariantResponseDto(
@@ -122,10 +123,10 @@ public class ProductService {
     public void updateProductById(Integer productId, UpdateProductDto updateProductDto) {
         var productEntity = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
-        if (updateProductDto.categoryId() != null && updateProductDto.categoryId() != productEntity.getCategory().getCategoryId()) {
-            var category = categoryRepository.findById(updateProductDto.categoryId()).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+        if (updateProductDto.subcategoryId() != null && updateProductDto.subcategoryId() != productEntity.getSubcategory().getSubcategoryId()) {
+            var subcategory = subcategoryRepository.findById(updateProductDto.subcategoryId()).orElseThrow(() -> new RuntimeException("Subcategoria não encontrada"));
 
-            productEntity.setCategory(category);
+            productEntity.setSubcategory(subcategory);
         }
 
         if (updateProductDto.name() != null)

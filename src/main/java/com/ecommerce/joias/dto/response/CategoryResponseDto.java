@@ -5,7 +5,6 @@ import java.util.List;
 public record CategoryResponseDto(
         Integer categoryId,
         String name,
-        List<ProductShortResponseDto> products,
         List<SubcategoryResponseDto> subCategories
 ) {
 }
