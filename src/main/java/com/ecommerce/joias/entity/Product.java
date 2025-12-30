@@ -26,6 +26,9 @@ public class Product {
     @Column(name = "material")
     private String material;
 
+    @Column(name = "featured", nullable = false)
+    private boolean featured = false;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductVariant> variants = new ArrayList<>();
 
@@ -77,6 +80,14 @@ public class Product {
 
     public void setMaterial(String material) {
         this.material = material;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
     }
 
     public List<ProductVariant> getVariants() {

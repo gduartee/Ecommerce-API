@@ -14,6 +14,8 @@ public record CreateProductDto(
         String description,
 
         @NotBlank(message = "Material obrigatório")
-        String material
+        String material,
+
+        boolean featured
 ) {
 }

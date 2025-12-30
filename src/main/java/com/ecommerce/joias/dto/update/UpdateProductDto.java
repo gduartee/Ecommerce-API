@@ -4,6 +4,7 @@ public record UpdateProductDto(
         Integer subcategoryId,
         String name,
         String description,
-        String material
+        String material,
+        Boolean featured
 ) {
 }

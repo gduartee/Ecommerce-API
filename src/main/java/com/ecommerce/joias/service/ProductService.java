@@ -36,6 +36,7 @@ public class ProductService {
         productEntity.setSubcategory(subcategory);
         productEntity.setDescription(createProductDto.description());
         productEntity.setMaterial(createProductDto.material());
+        productEntity.setFeatured(createProductDto.featured());
 
         var productSaved = productRepository.save(productEntity);
 
@@ -49,6 +50,7 @@ public class ProductService {
                 productSaved.getName(),
                 productSaved.getDescription(),
                 productSaved.getMaterial(),
+                productSaved.getFeatured(),
                 subcategoryInfo,
                 java.util.List.of()
         );
@@ -77,6 +79,7 @@ public class ProductService {
                 product.getName(),
                 product.getDescription(),
                 product.getMaterial(),
+                product.getFeatured(),
                 categoryInfo,
                 productVariantsDto
         );
@@ -86,7 +89,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, limit);
         Page<Product> pageData;
 
-        if(name != null && !name.isBlank())
+        if (name != null && !name.isBlank())
             pageData = productRepository.findByNameContainingIgnoreCase(name, pageable);
         else
             pageData = productRepository.findAll(pageable);
@@ -96,6 +99,7 @@ public class ProductService {
                 product.getName(),
                 product.getDescription(),
                 product.getMaterial(),
+                product.getFeatured(),
                 new ProductResponseDto.SubcategoryInfo(
                         product.getSubcategory().getSubcategoryId(),
                         product.getSubcategory().getName()
@@ -137,6 +141,9 @@ public class ProductService {
 
         if (updateProductDto.material() != null)
             productEntity.setMaterial(updateProductDto.material());
+
+        if (updateProductDto.featured())
+            productEntity.setFeatured(true);
 
         productRepository.save(productEntity);
     }

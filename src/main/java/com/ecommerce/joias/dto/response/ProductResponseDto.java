@@ -7,11 +7,13 @@ public record ProductResponseDto(
         String name,
         String description,
         String material,
+        Boolean featured,
         SubcategoryInfo subcategory,
         List<ProductVariantResponseDto> productVariants
 ) {
     public record SubcategoryInfo(
             Integer subcategoryId,
             String name
-    ) {}
+    ) {
+    }
 }
