@@ -24,12 +24,18 @@ public class AuthController {
 
     @PostMapping("/employee/login")
     public ResponseEntity employeeLogin(@RequestBody @Valid AuthenticationDto authenticationDto){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDto.email(), authenticationDto.password());
+       try{
+           var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDto.email(), authenticationDto.password());
 
-        var auth = authenticationManager.authenticate(usernamePassword);
+           var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Employee) auth.getPrincipal());
+           var token = tokenService.generateToken((Employee) auth.getPrincipal());
 
-        return ResponseEntity.ok(token);
+           return ResponseEntity.ok(token);
+       } catch (org.springframework.security.authentication.BadCredentialsException e){
+           return ResponseEntity.status(401).body("E-mail ou senha inválidos");
+       } catch (Exception e) {
+           return ResponseEntity.status(500).body("Erro ao realizar login: " + e.getMessage());
+       }
     }
 }
