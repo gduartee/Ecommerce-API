@@ -1,10 +1,16 @@
 package com.ecommerce.joias.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_employees")
-public class Employee {
+public class Employee implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +28,40 @@ public class Employee {
     @Column(name = "role")
     private String role;
 
-    public Employee(){
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role.equals("MANAGER"))
+            return List.of(new SimpleGrantedAuthority("ROLE_MANAGER"));
+        else
+            return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public Employee() {
 
     }
 
@@ -72,4 +111,5 @@ public class Employee {
     public void setRole(String role) {
         this.role = role;
     }
+
 }

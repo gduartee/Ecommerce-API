@@ -9,4 +9,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     boolean existsByEmail(String email);
 
     Page<Employee> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+    Employee findByEmail(String email);
 }
