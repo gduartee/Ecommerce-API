@@ -14,7 +14,12 @@ public class AuthorizationService implements UserDetailsService {
     EmployeeRepository employeeRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        return employeeRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
+        var employee = employeeRepository.findByEmail(email);
+
+        if(employee == null)
+            throw new UsernameNotFoundException("E-mail ou senha inválidos");
+
+        return employee;
     }
 }
