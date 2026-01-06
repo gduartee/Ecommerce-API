@@ -37,6 +37,7 @@ public class SecurityConfigurations {
                         // --------------------------------------------------------
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll() // Login e Register
                         .requestMatchers(HttpMethod.GET, "/images/**").permitAll() // Carregar fotos
+                        .requestMatchers("/error").permitAll()
 
                         // Vitrine da Loja (Qualquer um pode VER produtos e categorias)
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()

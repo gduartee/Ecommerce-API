@@ -6,6 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -41,4 +42,35 @@ public class GlobalExceptionHandler {
 
         return problemDetail;
     }
+
+    // Captura erros de banco de dados (ex: SKU ou E-mail duplicado)
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ProblemDetail handleDatabaseExceptions(org.springframework.dao.DataIntegrityViolationException ex) {
+
+        // Status 409 = Conflict (Conflito)
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                "Já existe um registro com essa informação (provavelmente SKU ou nome duplicado)."
+        );
+
+        problemDetail.setTitle("Conflito de Dados");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+    // Captura erros lançados manualmente (throw new ResponseStatusException...)
+    @ExceptionHandler(ResponseStatusException.class)
+    public ProblemDetail handleResponseStatusException(ResponseStatusException ex) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                ex.getStatusCode(),
+                ex.getReason()
+        );
+
+        problemDetail.setTitle("Erro na Operação");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
 }
