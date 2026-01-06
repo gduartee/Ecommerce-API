@@ -50,7 +50,7 @@ public class SecurityConfigurations {
                         // Mexer no Catálogo (Criar/Editar/Deletar) -> Só ADMIN ou MANAGER
                         .requestMatchers(HttpMethod.POST, "/products/**", "/categories/**", "/subcategories/**", "/variants/**", "/images/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/products/**", "/categories/**", "/subcategories/**", "/variants/**").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/products/**", "/categories/**", "/subcategories/**", "/variants/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**", "/categories/**", "/subcategories/**", "/variants/**", "/images/**").hasRole("MANAGER")
 
                         // Gestão de Funcionários -> Só ADMIN manda
                         .requestMatchers("/employees/**").hasRole("MANAGER")
