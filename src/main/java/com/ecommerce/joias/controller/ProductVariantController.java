@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/variants")
@@ -35,6 +36,20 @@ public class ProductVariantController {
         var productVariantDto = productVariantService.getProductVariantById(productVariantId);
 
         return ResponseEntity.ok(productVariantDto);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<ProductVariantResponseDto> getProductVariantByProductId(@PathVariable("productId") Integer productId) {
+        var productVariantDto = productVariantService.findProductVariantByProductId(productId);
+
+        return ResponseEntity.ok(productVariantDto);
+    }
+
+    @GetMapping("all/product/{productId}")
+    public ResponseEntity<List<ProductVariantResponseDto>> listProductVariantsByProductId(@PathVariable("productId") Integer productId) {
+        var variants = productVariantService.listProductVariantsByProductId(productId);
+
+        return ResponseEntity.ok(variants);
     }
 
     @GetMapping

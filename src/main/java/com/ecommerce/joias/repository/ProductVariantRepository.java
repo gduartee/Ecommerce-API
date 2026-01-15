@@ -4,8 +4,15 @@ import com.ecommerce.joias.entity.ProductVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Integer> {
     boolean existsBySku(String sku);
     boolean existsBySkuAndProductVariantIdNot(String sku, Integer productVariantId);
+
+    Optional<ProductVariant> findByProductProductId(Integer productId);
+
+    List<ProductVariant> findAllByProductProductId(Integer productId);
 }

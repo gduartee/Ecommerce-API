@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class ProductVariantService {
@@ -54,6 +55,32 @@ public class ProductVariantService {
 
     public ProductVariantResponseDto getProductVariantById(Integer productVariantId) {
         var productVariantEntity = productVariantRepository.findById(productVariantId).orElseThrow(() -> new RuntimeException("Variação de produto não encontrada"));
+
+        return new ProductVariantResponseDto(
+                productVariantEntity.getProductVariantId(),
+                productVariantEntity.getSize(),
+                productVariantEntity.getSku(),
+                productVariantEntity.getPrice(),
+                productVariantEntity.getStockQuantity(),
+                productVariantEntity.getWeightGrams()
+        );
+    }
+
+    public List<ProductVariantResponseDto> listProductVariantsByProductId(Integer productId){
+        var productVariants = productVariantRepository.findAllByProductProductId(productId);
+
+        return productVariants.stream().map(variant -> new ProductVariantResponseDto(
+                variant.getProductVariantId(),
+                variant.getSize(),
+                variant.getSku(),
+                variant.getPrice(),
+                variant.getStockQuantity(),
+                variant.getWeightGrams()
+        )).toList();
+    }
+
+    public ProductVariantResponseDto findProductVariantByProductId(Integer productId){
+        var productVariantEntity = productVariantRepository.findByProductProductId(productId).orElseThrow(() -> new RuntimeException("Variação do produto não encontrada!"));
 
         return new ProductVariantResponseDto(
                 productVariantEntity.getProductVariantId(),
