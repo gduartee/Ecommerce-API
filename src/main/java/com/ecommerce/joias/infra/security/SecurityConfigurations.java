@@ -35,7 +35,7 @@ public class SecurityConfigurations {
                         // --------------------------------------------------------
                         // 1. ROTAS TOTALMENTE PÚBLICAS (Acesso Livre)
                         // --------------------------------------------------------
-                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll() // Login e Register
+                        .requestMatchers(HttpMethod.POST, "/auth/**", "/users/**").permitAll() // Login e Register
                         .requestMatchers(HttpMethod.GET, "/images/**").permitAll() // Carregar fotos
                         .requestMatchers("/error").permitAll()
 

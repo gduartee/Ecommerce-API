@@ -2,6 +2,7 @@ package com.ecommerce.joias.controller;
 
 import com.ecommerce.joias.dto.authentication.AuthenticationDto;
 import com.ecommerce.joias.entity.Employee;
+import com.ecommerce.joias.entity.User;
 import com.ecommerce.joias.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,13 @@ public class AuthController {
     public ResponseEntity employeeLogin(@RequestBody @Valid AuthenticationDto authenticationDto){
        try{
            var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDto.email(), authenticationDto.password());
-
            var auth = authenticationManager.authenticate(usernamePassword);
 
-           var token = tokenService.generateToken((Employee) auth.getPrincipal());
+           if (!(auth.getPrincipal() instanceof Employee)) {
+               return ResponseEntity.status(403).body("Acesso restrito a funcionários.");
+           }
+
+           var token = tokenService.generateTokenEmployee((Employee) auth.getPrincipal());
 
            return ResponseEntity.ok(token);
        } catch (org.springframework.security.authentication.BadCredentialsException e){
@@ -37,5 +41,22 @@ public class AuthController {
        } catch (Exception e) {
            return ResponseEntity.status(500).body("Erro ao realizar login: " + e.getMessage());
        }
+    }
+
+    @PostMapping("/user/login")
+    public ResponseEntity userLogin(@RequestBody @Valid AuthenticationDto authenticationDto){
+        try{
+            var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDto.email(), authenticationDto.password());
+
+            var auth = authenticationManager.authenticate(usernamePassword);
+
+            var token = tokenService.generateTokenUser((User) auth.getPrincipal());
+
+            return ResponseEntity.ok(token);
+        } catch (org.springframework.security.authentication.BadCredentialsException e){
+            return ResponseEntity.status(401).body("E-mail ou senha inválidos");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao realizar login: " + e.getMessage());
+        }
     }
 }

@@ -51,6 +51,17 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/revenue/total")
+    public ResponseEntity<Double> getTotalFaturado() {
+        Double total = orderService.getTotalFaturado();
+        return ResponseEntity.ok(total);
+    }
+
+    @GetMapping("/stats/products-sold-month")
+    public ResponseEntity<Integer> getProductsSoldMonth() {
+        return ResponseEntity.ok(orderService.getProdutosVendidosNoMes());
+    }
+
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrderById(@PathVariable("orderId") Integer orderId) {
         orderService.deleteOrderById(orderId);

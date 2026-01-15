@@ -1,4 +1,4 @@
-package com.ecommerce.joias.entity;
+package com.ecommerce.joias.entity.enums;
 
 public enum OrderStatus {
     WAITING_PAYMENT, // Aguardando Pagamento

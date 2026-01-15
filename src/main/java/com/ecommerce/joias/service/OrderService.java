@@ -6,7 +6,7 @@ import com.ecommerce.joias.dto.response.OrderResponseDto;
 import com.ecommerce.joias.dto.update.UpdateOrderDto;
 import com.ecommerce.joias.entity.Order;
 import com.ecommerce.joias.entity.OrderItem;
-import com.ecommerce.joias.entity.OrderStatus;
+import com.ecommerce.joias.entity.enums.OrderStatus;
 import com.ecommerce.joias.repository.AddressRepository;
 import com.ecommerce.joias.repository.OrderRepository;
 import com.ecommerce.joias.repository.ProductVariantRepository;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -162,6 +163,27 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    public Double getTotalFaturado(){
+        Double total = orderRepository.sumTotalPriceByStatus(OrderStatus.PAID);
+        return total != null ? total : 0.0;
+    }
+
+    public Integer getProdutosVendidosNoMes() {
+        LocalDateTime now = LocalDateTime.now();
+        // Primeiro dia do mês às 00:00:00
+        LocalDateTime startOfMonth = now.withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+        // Último dia do mês às 23:59:59
+        LocalDateTime endOfMonth = now.with(TemporalAdjusters.lastDayOfMonth()).withHour(23).withMinute(59).withSecond(59);
+
+        Integer total = orderRepository.sumQuantityByStatusAndDate(
+                OrderStatus.PAID,
+                startOfMonth,
+                endOfMonth
+        );
+
+        return total != null ? total : 0;
+    }
+
     public void deleteOrderById(Integer orderId) {
         orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
@@ -174,4 +196,6 @@ public class OrderService {
             productVariant.setStockQuantity(productVariant.getStockQuantity() + item.getQuantity());
         }
     }
+
+
 }

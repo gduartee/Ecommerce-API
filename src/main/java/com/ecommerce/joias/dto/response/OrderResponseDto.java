@@ -1,6 +1,6 @@
 package com.ecommerce.joias.dto.response;
 
-import com.ecommerce.joias.entity.OrderStatus;
+import com.ecommerce.joias.entity.enums.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
