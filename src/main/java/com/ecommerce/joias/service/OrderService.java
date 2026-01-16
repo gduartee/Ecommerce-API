@@ -184,6 +184,10 @@ public class OrderService {
         return total != null ? total : 0;
     }
 
+    public int getCountPendingDelivery(){
+        return  orderRepository.countByStatus(OrderStatus.PAID);
+    }
+
     public void deleteOrderById(Integer orderId) {
         orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 

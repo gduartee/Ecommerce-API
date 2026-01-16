@@ -62,6 +62,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getProdutosVendidosNoMes());
     }
 
+    @GetMapping("/pending-delivery")
+    public ResponseEntity<Integer> getPendingDelivery(){
+        var countPendingDelivery = orderService.getCountPendingDelivery();
+
+        return ResponseEntity.ok(countPendingDelivery);
+    }
+
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrderById(@PathVariable("orderId") Integer orderId) {
         orderService.deleteOrderById(orderId);
