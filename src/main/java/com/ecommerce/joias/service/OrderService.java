@@ -28,12 +28,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
     private final ProductVariantRepository productVariantRepository;
+    private final EmailService emailService;
 
-    public OrderService(UserRepository userRepository, OrderRepository orderRepository, AddressRepository addressRepository, ProductVariantRepository productVariantRepository) {
+    public OrderService(UserRepository userRepository, OrderRepository orderRepository, AddressRepository addressRepository, ProductVariantRepository productVariantRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.productVariantRepository = productVariantRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -148,6 +150,35 @@ public class OrderService {
         );
     }
 
+    public ApiResponse<OrderResponseDto> findAllByUserId(UUID userId, Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+
+        var pageData = orderRepository.findAllByUserUserId(userId, pageable);
+
+        var ordersDto = pageData.getContent().stream().map(order -> new OrderResponseDto(
+                order.getOrderId(),
+                order.getCreatedAt(),
+                order.getTotalPrice(),
+                order.getStatus(),
+                order.getTrackingCode(),
+                order.getOrderItems().stream().map(orderItem -> new OrderResponseDto.OrderItemResponseDto(
+                        orderItem.getOrderItemId(),
+                        orderItem.getProductVariant().getSku(),
+                        orderItem.getQuantity(),
+                        orderItem.getUnitPrice(),
+                        orderItem.getUnitPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity()))
+                )).toList()
+        )).toList();
+
+        return new ApiResponse<>(
+                ordersDto,
+                pageData.getTotalElements(),
+                pageData.getTotalPages(),
+                pageData.getNumber(),
+                pageData.getSize()
+        );
+    }
+
     public void updateOrderById(Integer orderId, UpdateOrderDto updateOrderDto) {
         var order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
@@ -163,7 +194,31 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public Double getTotalFaturado(){
+    @Transactional
+    public void updateTrackingAndShip(Integer orderId, String trackingCode) {
+        // 1. Busca o pedido ou estoura erro se não existir
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        // 2. Atualiza os dados e muda o status para ENVIADO (SHIPPED)
+        order.setTrackingCode(trackingCode);
+        order.setStatus(OrderStatus.SHIPPED);
+        orderRepository.save(order);
+
+        // 3. Chama a função de enviar e-mail (Lógica solicitada)
+        // Usamos um try-catch aqui para que, se o e-mail falhar, o rastreio continue salvo no banco
+        try {
+            emailService.sendTrackingEmail(
+                    order.getUser().getEmail(),
+                    order.getUser().getName(),
+                    trackingCode
+            );
+        } catch (Exception e) {
+            System.err.println("Erro ao enviar e-mail de rastreio: " + e.getMessage());
+        }
+    }
+
+    public Double getTotalFaturado() {
         Double total = orderRepository.sumTotalPriceByStatus(OrderStatus.PAID);
         return total != null ? total : 0.0;
     }
@@ -184,8 +239,8 @@ public class OrderService {
         return total != null ? total : 0;
     }
 
-    public int getCountPendingDelivery(){
-        return  orderRepository.countByStatus(OrderStatus.PAID);
+    public int getCountPendingDelivery() {
+        return orderRepository.countByStatus(OrderStatus.PAID);
     }
 
     public void deleteOrderById(Integer orderId) {

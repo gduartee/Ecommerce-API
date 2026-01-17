@@ -56,6 +56,7 @@ public class UserService {
         return new UserResponseDto(
                 user.getUserId(),
                 user.getName(),
+                user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCpf(),
                 user.getPassword(),
@@ -81,6 +82,7 @@ public class UserService {
         var usersDto = pageData.getContent().stream().map(user -> new UserResponseDto(
                 user.getUserId(),
                 user.getName(),
+                user.getEmail(),
                 user.getPhoneNumber(),
                 user.getCpf(),
                 user.getPassword(),
