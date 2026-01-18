@@ -65,7 +65,6 @@ public class ProductVariantService {
                 productVariantEntity.getWeightGrams()
         );
     }
-
     public List<ProductVariantResponseDto> listProductVariantsByProductId(Integer productId){
         var productVariants = productVariantRepository.findAllByProductProductId(productId);
 

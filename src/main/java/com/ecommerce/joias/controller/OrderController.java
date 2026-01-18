@@ -4,6 +4,7 @@ import com.ecommerce.joias.dto.create.CreateOrderDto;
 import com.ecommerce.joias.dto.response.ApiResponse;
 import com.ecommerce.joias.dto.response.OrderResponseDto;
 import com.ecommerce.joias.dto.update.UpdateOrderDto;
+import com.ecommerce.joias.entity.enums.OrderStatus;
 import com.ecommerce.joias.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,12 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<OrderResponseDto>> listOrders(@RequestParam(name = "page", defaultValue = "0") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit) {
-        var ordersDto = orderService.listOrders(page, limit);
+    public ResponseEntity<ApiResponse<OrderResponseDto>> listOrders(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(name = "status", required = false)OrderStatus orderStatus
+            ) {
+        var ordersDto = orderService.listOrders(page, limit, orderStatus);
 
         return ResponseEntity.ok(ordersDto);
     }

@@ -12,6 +12,7 @@ import com.ecommerce.joias.repository.OrderRepository;
 import com.ecommerce.joias.repository.ProductVariantRepository;
 import com.ecommerce.joias.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -92,8 +93,22 @@ public class OrderService {
                 savedOrder.getTotalPrice(),
                 savedOrder.getStatus(),
                 savedOrder.getTrackingCode(),
+                new OrderResponseDto.UserOrderDto(
+                        savedOrder.getUser().getUserId(),
+                        savedOrder.getUser().getName(),
+                        savedOrder.getUser().getEmail(),
+                        savedOrder.getUser().getPhoneNumber(),
+                        savedOrder.getUser().getPhoneNumber()
+                ),
+                new OrderResponseDto.AddressOrderDto(
+                        savedOrder.getAddress().getCep(),
+                        savedOrder.getAddress().getStreet(),
+                        savedOrder.getAddress().getNum()
+                ),
                 savedOrder.getOrderItems().stream().map(item -> new OrderResponseDto.OrderItemResponseDto(
                         item.getOrderItemId(),
+                        item.getProductVariant().getProduct().getName(),
+                        item.getProductVariant().getSize(),
                         item.getProductVariant().getSku(),
                         item.getQuantity(),
                         item.getUnitPrice(),
@@ -111,8 +126,22 @@ public class OrderService {
                 orderEntity.getTotalPrice(),
                 orderEntity.getStatus(),
                 orderEntity.getTrackingCode(),
+                new OrderResponseDto.UserOrderDto(
+                        orderEntity.getUser().getUserId(),
+                        orderEntity.getUser().getName(),
+                        orderEntity.getUser().getEmail(),
+                        orderEntity.getUser().getPhoneNumber(),
+                        orderEntity.getUser().getPhoneNumber()
+                ),
+                new OrderResponseDto.AddressOrderDto(
+                        orderEntity.getAddress().getCep(),
+                        orderEntity.getAddress().getStreet(),
+                        orderEntity.getAddress().getNum()
+                ),
                 orderEntity.getOrderItems().stream().map(orderItem -> new OrderResponseDto.OrderItemResponseDto(
                         orderItem.getOrderItemId(),
+                        orderItem.getProductVariant().getProduct().getName(),
+                        orderItem.getProductVariant().getSize(),
                         orderItem.getProductVariant().getSku(),
                         orderItem.getQuantity(),
                         orderItem.getUnitPrice(),
@@ -121,10 +150,15 @@ public class OrderService {
         );
     }
 
-    public ApiResponse<OrderResponseDto> listOrders(Integer page, Integer limit) {
+    public ApiResponse<OrderResponseDto> listOrders(Integer page, Integer limit, OrderStatus orderStatus) {
         Pageable pageable = PageRequest.of(page, limit);
 
-        var pageData = orderRepository.findAll(pageable);
+        Page<Order> pageData;
+
+        if(orderStatus != null)
+            pageData = orderRepository.findByStatus(orderStatus, pageable);
+        else
+            pageData = orderRepository.findAll(pageable);
 
         var ordersDto = pageData.getContent().stream().map(order -> new OrderResponseDto(
                 order.getOrderId(),
@@ -132,8 +166,22 @@ public class OrderService {
                 order.getTotalPrice(),
                 order.getStatus(),
                 order.getTrackingCode(),
+                new OrderResponseDto.UserOrderDto(
+                        order.getUser().getUserId(),
+                        order.getUser().getName(),
+                        order.getUser().getEmail(),
+                        order.getUser().getPhoneNumber(),
+                        order.getUser().getPhoneNumber()
+                ),
+                new OrderResponseDto.AddressOrderDto(
+                        order.getAddress().getCep(),
+                        order.getAddress().getStreet(),
+                        order.getAddress().getNum()
+                ),
                 order.getOrderItems().stream().map(orderItem -> new OrderResponseDto.OrderItemResponseDto(
                         orderItem.getOrderItemId(),
+                        orderItem.getProductVariant().getProduct().getName(),
+                        orderItem.getProductVariant().getSize(),
                         orderItem.getProductVariant().getSku(),
                         orderItem.getQuantity(),
                         orderItem.getUnitPrice(),
@@ -161,8 +209,22 @@ public class OrderService {
                 order.getTotalPrice(),
                 order.getStatus(),
                 order.getTrackingCode(),
+                new OrderResponseDto.UserOrderDto(
+                        order.getUser().getUserId(),
+                        order.getUser().getName(),
+                        order.getUser().getEmail(),
+                        order.getUser().getPhoneNumber(),
+                        order.getUser().getPhoneNumber()
+                ),
+                new OrderResponseDto.AddressOrderDto(
+                        order.getAddress().getCep(),
+                        order.getAddress().getStreet(),
+                        order.getAddress().getNum()
+                ),
                 order.getOrderItems().stream().map(orderItem -> new OrderResponseDto.OrderItemResponseDto(
                         orderItem.getOrderItemId(),
+                        orderItem.getProductVariant().getProduct().getName(),
+                        orderItem.getProductVariant().getSize(),
                         orderItem.getProductVariant().getSku(),
                         orderItem.getQuantity(),
                         orderItem.getUnitPrice(),
